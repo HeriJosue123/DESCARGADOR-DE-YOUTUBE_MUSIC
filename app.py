@@ -435,7 +435,8 @@ def buscar():
         'extract_flat': 'in_playlist',
         'quiet': True,
         'no_warnings': True,
-        'default_search': 'ytsearch5'
+        'default_search': 'ytsearch5',
+        'extractor_args': {'youtube': ['player_client=android']}
     }
     
     try:
@@ -490,23 +491,24 @@ def descargar():
     # Opciones de yt-dlp para MP3 de alta calidad y con portada embebida
     ydl_opts = {
         'format': 'bestaudio/best',
-        'writethumbnail': True, # Descargar portada
+        'writethumbnail': True,
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
-                'preferredquality': '320', # Maxima calidad
+                'preferredquality': '320', 
             },
             {
-                'key': 'EmbedThumbnail', # Embeber portada en el mp3
+                'key': 'EmbedThumbnail', 
             },
             {
-                'key': 'FFmpegMetadata', # Agregar titulo, artista, etc
+                'key': 'FFmpegMetadata', 
             }
         ],
         'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
         'quiet': True,
         'no_warnings': True,
+        'extractor_args': {'youtube': ['player_client=android']}
     }
     
     try:
