@@ -144,6 +144,22 @@ HTML = """
         .loading { background-color: var(--glass-bg); color: var(--text-main); display: block !important; border: 1px solid var(--glass-border); }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .ph-spinner { animation: spin 1s linear infinite; }
+        .dev-signature {
+            margin-top: auto; padding: 25px 20px 15px; width: 100%;
+            text-align: center; font-size: 12px; color: rgba(255, 255, 255, 0.4);
+        }
+        .dev-signature .footer-divider {
+            width: 60px; height: 1px; background: rgba(255, 255, 255, 0.1);
+            margin: 0 auto 15px auto;
+        }
+        .dev-signature p { margin: 4px 0; letter-spacing: 0.5px; }
+        .dev-signature .dev-name {
+            font-weight: 600; color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease; cursor: default;
+        }
+        .dev-signature .dev-name:hover {
+            color: rgba(255, 255, 255, 0.95); text-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+        }
     </style>
 </head>
 <body>
@@ -372,6 +388,11 @@ HTML = """
             });
         }
     </script>
+    <footer class="dev-signature">
+        <div class="footer-divider"></div>
+        <p>Music Hub Cloud</p>
+        <p>Desarrollado por <span class="dev-name">THEyosua_503</span></p>
+    </footer>
 </body>
 </html>
 """
