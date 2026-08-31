@@ -1,4 +1,5 @@
 import os
+import sys
 import tempfile
 import glob
 import io
@@ -10,7 +11,12 @@ import yt_dlp
 import imageio_ffmpeg
 
 # Configuración y Seguridad
-PIN_SECRETO = os.environ.get("SECRET_PIN", "2026")
+SECRET_PIN = os.environ.get("SECRET_PIN")
+if not SECRET_PIN:
+    print("ERROR CRITICO: La variable de entorno 'SECRET_PIN' no esta configurada.")
+    print("El servidor no puede iniciar de forma insegura. Abortando.")
+    sys.exit(1)
+
 MAX_DESCARGAS_CONCURRENTES = 2
 
 # Controladores de concurrencia y dependencias
@@ -143,7 +149,7 @@ HTML = """
 <body>
     <div class="glass-panel">
         <h1>Music Hub Cloud</h1>
-        <p class="subtitle">Buscador Oficial y Descargas Autorizadas</p>
+        <p class="subtitle">Buscador Oficial y Descargas Autorizadas<br><small style="opacity: 0.7;">Nota: En Render Free, el servidor suspende su actividad tras 15 min sin uso.</small></p>
         
         <div class="platform-icons">
             <div class="platform-btn active" id="icon-yt">
@@ -264,6 +270,7 @@ HTML = """
                                     <span class="channel"><i class="ph-fill ph-user"></i> ${vid.channel}</span>
                                     <span class="duration"><i class="ph-fill ph-clock"></i> ${vid.duration}</span>
                                     <span class="badge ${badgeClass}">${badgeText}</span>
+                                    <span class="badge" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);"><i class="ph-fill ph-headphones"></i> Mejor MP3 disponible</span>
                                 </div>
                             </div>
                             ${actionButton}
@@ -362,7 +369,7 @@ def index():
 def buscar():
     data = request.json
     pin = data.get('pin', '')
-    if pin != PIN_SECRETO:
+    if pin != SECRET_PIN:
         return jsonify({"success": False, "error": "PIN incorrecto"}), 403
 
     query = data.get('query', '').strip()
@@ -434,7 +441,7 @@ def buscar():
 def descargar():
     data = request.json
     pin = data.get('pin', '')
-    if pin != PIN_SECRETO:
+    if pin != SECRET_PIN:
         return jsonify({"success": False, "error": "PIN incorrecto"}), 403
 
     query = data.get('query', '').strip()
@@ -463,7 +470,7 @@ def descargar():
                 {
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'mp3',
-                    'preferredquality': '320',
+                    'preferredquality': '0',
                 },
                 {
                     'key': 'EmbedThumbnail',
@@ -510,6 +517,6 @@ if __name__ == '__main__':
     print(f" Inciando MUSIC HUB (Buscador YT + Descarga Externa)")
     print(f" - Reproductor oficial de YouTube Integrado")
     print(f" - Descargas autorizadas: {', '.join(FUENTES_PERMITIDAS)}")
-    print(f" - Limpieza estricta de temporales activada")
+    print(f" - NOTA: Render Free suspende el servidor tras 15 min de inactividad.")
     print(f"==================================================")
     serve(app, host='0.0.0.0', port=5000, threads=10)
