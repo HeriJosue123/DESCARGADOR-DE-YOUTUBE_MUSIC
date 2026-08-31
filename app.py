@@ -24,7 +24,7 @@ semaforo_descargas = threading.Semaphore(MAX_DESCARGAS_CONCURRENTES)
 FFMPEG_PATH = imageio_ffmpeg.get_ffmpeg_exe()
 
 # Fuentes permitidas para descarga
-FUENTES_PERMITIDAS = ['soundcloud.com', 'bandcamp.com']
+FUENTES_PERMITIDAS = ['soundcloud.com']
 
 app = Flask(__name__)
 
@@ -519,4 +519,5 @@ if __name__ == '__main__':
     print(f" - Descargas autorizadas: {', '.join(FUENTES_PERMITIDAS)}")
     print(f" - NOTA: Render Free suspende el servidor tras 15 min de inactividad.")
     print(f"==================================================")
-    serve(app, host='0.0.0.0', port=5000, threads=10)
+    puerto = int(os.environ.get("PORT", 5000))
+    serve(app, host='0.0.0.0', port=puerto, threads=10)
