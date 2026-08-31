@@ -435,6 +435,7 @@ def buscar():
         'extract_flat': 'in_playlist',
         'quiet': True,
         'no_warnings': True,
+        'cookiefile': 'cookies.txt' if os.path.exists('cookies.txt') else None,
         'default_search': 'ytsearch5',
         'extractor_args': {'youtube': ['player_client=ios,tv,android', 'player_skip=web,mweb']}
     }
@@ -492,6 +493,7 @@ def descargar():
     ydl_opts = {
         'format': 'bestaudio/best',
         'writethumbnail': True,
+        'cookiefile': 'cookies.txt' if os.path.exists('cookies.txt') else None,
         'postprocessors': [
             {
                 'key': 'FFmpegExtractAudio',
