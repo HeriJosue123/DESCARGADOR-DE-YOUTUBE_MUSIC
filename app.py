@@ -266,16 +266,7 @@ HTML = """
         <div class="platform-icons">
             <div class="platform-btn active">
                 <i class="ph-fill ph-youtube-logo"></i>
-                <span>YT Music</span>
-            </div>
-            <!-- Otros íconos visuales como en el diseño -->
-            <div class="platform-btn" style="opacity:0.5">
-                <i class="ph-fill ph-spotify-logo"></i>
-                <span>Spotify</span>
-            </div>
-            <div class="platform-btn" style="opacity:0.5">
-                <i class="ph-fill ph-tiktok-logo"></i>
-                <span>TikTok</span>
+                <span>YouTube Music</span>
             </div>
         </div>
 
