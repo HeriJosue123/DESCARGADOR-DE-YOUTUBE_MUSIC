@@ -436,7 +436,7 @@ def buscar():
         'quiet': True,
         'no_warnings': True,
         'default_search': 'ytsearch5',
-        'extractor_args': {'youtube': ['player_client=android']}
+        'extractor_args': {'youtube': ['player_client=ios,tv,android', 'player_skip=web,mweb']}
     }
     
     try:
@@ -508,7 +508,7 @@ def descargar():
         'outtmpl': os.path.join(temp_dir, '%(title)s.%(ext)s'),
         'quiet': True,
         'no_warnings': True,
-        'extractor_args': {'youtube': ['player_client=android']}
+        'extractor_args': {'youtube': ['player_client=ios,tv,android', 'player_skip=web,mweb']}
     }
     
     try:

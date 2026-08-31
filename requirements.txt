@@ -1,4 +1,4 @@
 Flask==3.0.3
-yt-dlp
+git+https://github.com/yt-dlp/yt-dlp.git
 gunicorn==21.2.0
 mutagen
