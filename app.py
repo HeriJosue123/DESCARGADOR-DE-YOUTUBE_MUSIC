@@ -165,7 +165,7 @@ HTML = """
 <body>
     <div class="glass-panel">
         <h1>Music Hub Cloud</h1>
-        <p class="subtitle">Buscador Oficial y Descargas Autorizadas<br><small style="opacity: 0.7;">Nota: En Render Free, el servidor suspende su actividad tras 15 min sin uso.</small></p>
+        <p class="subtitle">Buscador Oficial y Descargas Autorizadas</p>
         
         <div class="platform-icons">
             <div class="platform-btn active" id="icon-yt">
@@ -391,7 +391,7 @@ HTML = """
     <footer class="dev-signature">
         <div class="footer-divider"></div>
         <p>Music Hub Cloud</p>
-        <p>Desarrollado por <span class="dev-name">THEyosua_503</span></p>
+        <p>Desarrollado por <span class="dev-name">HJC Web Studio</span></p>
     </footer>
 </body>
 </html>
@@ -557,7 +557,6 @@ if __name__ == '__main__':
     print(f" Inciando MUSIC HUB (Buscador YT + Descarga Externa)")
     print(f" - Reproductor oficial de YouTube Integrado")
     print(f" - Descargas autorizadas: {', '.join(FUENTES_PERMITIDAS)}")
-    print(f" - NOTA: Render Free suspende el servidor tras 15 min de inactividad.")
     print(f"==================================================")
     puerto = int(os.environ.get("PORT", 5000))
     serve(app, host='0.0.0.0', port=puerto, threads=10)
