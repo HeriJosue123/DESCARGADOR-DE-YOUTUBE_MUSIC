@@ -35,7 +35,7 @@ HTML = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Hub Cloud</title>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
     <style>
         :root {
             --bg-grad: linear-gradient(135deg, #2a0845 0%, #171c35 50%, #0d3b66 100%);
@@ -88,7 +88,7 @@ HTML = """
         input, select { 
             width: 100%; box-sizing: border-box; padding: 16px; 
             border-radius: 12px; border: 1px solid var(--glass-border); 
-            background: rgba(0, 0, 0, 0.2); color: white; font-size: 15px;
+            background: rgba(0, 0, 0, 0.2); color: white; font-size: 16px;
             transition: border-color 0.2s;
         }
         input[type="text"] { padding-left: 45px; }
@@ -189,6 +189,8 @@ HTML = """
     </div>
 
     <script>
+        let isProcessing = false;
+
         document.getElementById('query').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') buscar();
         });
@@ -206,16 +208,18 @@ HTML = """
             const status = document.getElementById('status');
             status.className = tipo;
             status.innerHTML = mensaje;
+            if(!mensaje) status.style.display = 'none';
         }
 
         function reproducir(video_id) {
             const player = document.getElementById('player-container');
             player.style.display = 'block';
-            // Se utiliza el reproductor oficial de YouTube y su infraestructura
             player.innerHTML = `<iframe src="https://www.youtube.com/embed/${video_id}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         }
 
         function buscar() {
+            if(isProcessing) return;
+            
             const query = document.getElementById('query').value.trim();
             const pin = document.getElementById('pin').value.trim();
             const source = document.getElementById('source').value;
@@ -225,6 +229,7 @@ HTML = """
                 return;
             }
             
+            isProcessing = true;
             mostrarEstado('<i class="ph ph-spinner"></i> Buscando metadatos...', 'loading');
             const btn = document.getElementById('btn-buscar');
             const resultsDiv = document.getElementById('results');
@@ -243,7 +248,6 @@ HTML = """
             .then(data => {
                 if(data.success) {
                     mostrarEstado("", "");
-                    document.getElementById('status').style.display = 'none';
                     if (data.results.length === 0) {
                         mostrarEstado("❌ No se encontraron resultados.", "error");
                         return;
@@ -260,10 +264,18 @@ HTML = """
                             actionButton = `<button class="btn-action download" title="Descargar MP3" onclick="descargar('${vid.url}', this)"><i class="ph-bold ph-download-simple"></i></button>`;
                         }
 
+                        // Optimización visual de portada en móviles
+                        let thumbUrl = vid.thumbnail;
+                        if(isYT && thumbUrl.includes('maxresdefault')) {
+                            thumbUrl = thumbUrl.replace('maxresdefault', 'mqdefault');
+                        } else if(isYT && thumbUrl.includes('hqdefault')) {
+                            thumbUrl = thumbUrl.replace('hqdefault', 'mqdefault');
+                        }
+
                         const div = document.createElement('div');
                         div.className = 'result-item';
                         div.innerHTML = `
-                            <img src="${vid.thumbnail}" class="result-thumb" alt="Portada" onerror="this.src='https://via.placeholder.com/60?text=🎵'">
+                            <img src="${thumbUrl}" class="result-thumb" alt="Portada" onerror="this.src='https://via.placeholder.com/60?text=🎵'">
                             <div class="result-info">
                                 <div class="result-title">${vid.title}</div>
                                 <div class="result-meta">
@@ -282,14 +294,20 @@ HTML = """
                 }
             })
             .catch(err => mostrarEstado("❌ Error de red.", "error"))
-            .finally(() => btn.disabled = false);
+            .finally(() => {
+                btn.disabled = false;
+                isProcessing = false;
+            });
         }
 
         function descargar(url_descarga, btnElement) {
+            if(isProcessing) return;
+            
             const pin = document.getElementById('pin').value.trim();
             const todosBotones = document.querySelectorAll('.btn-action');
             todosBotones.forEach(b => b.disabled = true);
             
+            isProcessing = true;
             const originalIcon = btnElement.innerHTML;
             btnElement.innerHTML = '<i class="ph ph-spinner"></i>';
             btnElement.style.background = "#ff9800";
@@ -350,6 +368,7 @@ HTML = """
                 todosBotones.forEach(b => {
                     if(b !== btnElement) b.disabled = false;
                 });
+                isProcessing = false;
             });
         }
     </script>
